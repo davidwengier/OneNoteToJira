@@ -1,0 +1,87 @@
+<html>
+
+<head>
+	<title>Convert OneNote bullet lists to Jira</title>
+	<style>
+		.heading {
+			padding-top:50px;
+		}
+
+		.heading, .center {
+			text-align: center;
+		}
+
+		.big {
+			font-size: x-large;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		#success {
+			padding-top:10px;
+			display:none;
+			text-align: center;
+		}
+
+		button {
+			height:50px;
+			width:200px;
+		}
+
+		.footer {
+			text-align: left;
+			padding-top: 100px;
+			font-size: small;
+		}
+	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+</head>
+
+<body>
+	<div class="heading big">Paste OneNote, Obtain Jira</div>
+	<div class="heading">Paste OneNote bullet lists here:</div>
+	<div class="center">
+		<textarea id="text" rows="30" cols="120"></textarea>
+	</div>
+	<div class="heading">Copy Jira bullet lists here:</div>
+	<div class="center">
+		<button id="convert">Convert and Copy</button>
+	</div>
+	<div id="success">Success!</div>
+
+	<div class="footer">
+		<div>Written by <a href="https://twitter.com/davidwengier">David Wengier</a></div>
+		<div>Like this? <a href="https://twitter.com/intent/tweet?text=I just converted a bullet list from OneNote to Jira, and you should to.&url=http://wengier.com/onenotetojira" rel="nofollow" target="_blank">Tweet about it!</a></div>
+		<div>Don't like this? <a href="https://github.com/davidwengier/OneNoteToJira">Submit a PR!</a></div>
+	</div>
+	<script>
+		function transform(value) {
+			return value
+				.replace(/• /g, "* ")
+				.replace(/○ /g, "** ")
+				.replace(/§ /g, "*** ")
+				.replace(/□ /g, "**** ")
+				.replace(/® /g, "***** ")
+				.replace(/◊ /g, "****** ")
+				.replace(/\t+\*/gi, "*");
+		}
+
+		var clipboard = new ClipboardJS('#convert', {
+			text: function (trigger) {
+				return transform(document.getElementById("text").value);
+			}
+		});
+
+		clipboard.on('success', function (e) {
+
+			var msgs = ['Go forth and Jira.', 'Paste into a Jira when you feel like it.', 'Away with you, to Jira!', 'Copied and converted, as requested.'];
+			var success = document.getElementById("success");
+			success.innerText = 'Success! ' + msgs[Math.floor(Math.random() * msgs.length)];
+			success.style.display = 'block';
+		});
+	</script>
+</body>
+
+</html>
